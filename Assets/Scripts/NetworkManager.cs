@@ -24,10 +24,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         int id = PhotonNetwork.LocalPlayer.ActorNumber;
 
-        if (id == 1) { 
+        if (id == 1)
+
             PhotonNetwork.Instantiate("PacmanPlayer", new Vector3(0, -3, 0), Quaternion.identity);
-            //else
+        else
             PhotonNetwork.Instantiate("GhostPlayer", new Vector3(2, 0, 0), Quaternion.identity);
-        }
+
     }
 }
