@@ -1,0 +1,58 @@
+using Photon.Pun;
+using UnityEngine;
+
+[RequireComponent(typeof(Movement))]
+public class Pacman : MonoBehaviourPun
+{
+    [SerializeField]
+    private AnimatedSprite deathSequence;
+    private SpriteRenderer spriteRenderer;
+    private CircleCollider2D circleCollider;
+    private Movement movement;
+
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        circleCollider = GetComponent<CircleCollider2D>();
+        movement = GetComponent<Movement>();
+    }
+
+    private void Update()
+    {
+        if (!photonView.IsMine) return;
+        // Set the new direction based on the current input
+        if (Input.GetKey(KeyCode.W))
+            movement.SetDirection(Vector2.up);
+        else if (Input.GetKey(KeyCode.S))
+            movement.SetDirection(Vector2.down);
+        else if (Input.GetKey(KeyCode.A))
+            movement.SetDirection(Vector2.left);
+        else if (Input.GetKey(KeyCode.D))
+            movement.SetDirection(Vector2.right);
+
+        // Rotate pacman to face the movement direction
+        float angle = Mathf.Atan2(movement.direction.y, movement.direction.x);
+        transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
+    }
+
+    public void ResetState()
+    {
+        enabled = true;
+        spriteRenderer.enabled = true;
+        circleCollider.enabled = true;
+        deathSequence.enabled = false;
+        movement.ResetState();
+        gameObject.SetActive(true);
+    }
+
+    public void DeathSequence()
+    {
+        enabled = false;
+        spriteRenderer.enabled = false;
+        circleCollider.enabled = false;
+        movement.enabled = false;
+        deathSequence.enabled = true;
+        deathSequence.Restart();
+    }
+
+}
