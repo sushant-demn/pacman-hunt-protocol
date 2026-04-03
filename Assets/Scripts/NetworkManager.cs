@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    private string roomName = "Room1";
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -13,7 +14,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected");
 
-        PhotonNetwork.JoinOrCreateRoom("Room1",
+        PhotonNetwork.JoinOrCreateRoom(roomName,
             new RoomOptions { MaxPlayers = 5 },
             TypedLobby.Default);
     }
