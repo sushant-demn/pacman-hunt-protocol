@@ -5,10 +5,19 @@ using TMPro;
 public class lobbymanager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_InputField roomName;
-
+    [SerializeField] private TMP_InputField playerName;
+    public GameObject lobbyCanvas;
+    public GameObject roomCanvas;
+    public GameObject joinCanvas;
+    public GameObject hostCanvas;
+    public GameObject characterSelectCanvas;
     void Start()
     {
-
+        lobbyCanvas.SetActive(true);
+        roomCanvas.SetActive(false);
+        joinCanvas.SetActive(false);
+        hostCanvas.SetActive(false);
+        characterSelectCanvas.SetActive(false);
     }
 
     public void HostGame()
@@ -36,5 +45,33 @@ public class lobbymanager : MonoBehaviourPunCallbacks
     {
         base.OnJoinedRoom();
         Debug.Log("joined room" + PhotonNetwork.CurrentRoom.Name);
+    }
+
+    public void DisplayJoinCanvas()
+    {
+
+        roomCanvas.SetActive(true);
+        joinCanvas.SetActive(true);
+        lobbyCanvas.SetActive(false);
+        hostCanvas.SetActive(false);
+        characterSelectCanvas.SetActive(false);
+    }
+
+    public void DisplayHostCanvas()
+    {
+        roomCanvas.SetActive(true);
+        hostCanvas.SetActive(true);
+        joinCanvas.SetActive(false);
+        lobbyCanvas.SetActive(false);
+        characterSelectCanvas.SetActive(false);
+    }
+
+    public void DisplayCharacterSelectCanvas()
+    {
+        characterSelectCanvas.SetActive(true);
+        roomCanvas.SetActive(false);
+        joinCanvas.SetActive(false);
+        lobbyCanvas.SetActive(false);
+        hostCanvas.SetActive(false);
     }
 }
