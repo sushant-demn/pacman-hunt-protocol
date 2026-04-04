@@ -1,35 +1,30 @@
+using System;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    private string roomName = "Room1";
-    void Start()
+    public String roomName = "room1";
+    private void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();
-    }
+        Debug.Log("Trying to Connect Master Server");
 
-    public override void OnConnectedToMaster()
-    {
-        Debug.Log("Connected");
-
-        PhotonNetwork.JoinOrCreateRoom(roomName,
-            new RoomOptions { MaxPlayers = 5 },
-            TypedLobby.Default);
-    }
-
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("Joined Room");
-
-        int id = PhotonNetwork.LocalPlayer.ActorNumber;
-
-        if (id == 1)
-
-            PhotonNetwork.Instantiate("PacmanPlayer", new Vector3(0, -3, 0), Quaternion.identity);
+        if (PhotonNetwork.ConnectUsingSettings())
+            Debug.Log("Connected to the master server");
         else
-            PhotonNetwork.Instantiate("GhostPlayer", new Vector3(2, 0, 0), Quaternion.identity);
+            Debug.Log("Failed to connect to the master server");
 
     }
+
+    public void HostServer()
+    {
+        RoomOptions options = new RoomOptions { MaxPlayers = 5 };
+        PhotonNetwork.CreateRoom(roomName, options);
+    }
+    public void joinServer()
+    {
+        PhotonNetwork.JoinRoom(roomName);
+    }
+
 }
