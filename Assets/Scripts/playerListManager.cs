@@ -11,7 +11,7 @@ public class PlayerListManager : MonoBehaviourPunCallbacks
     public void UpdatePlayerListUI()
     {
         // 1. Clear the current text
-        playerListText.text = "Players in Room:\n\n\n";
+        playerListText.text = "Players in Room:\n";
 
         // 2. Loop through every player in the room
         foreach (Player player in PhotonNetwork.PlayerList)
