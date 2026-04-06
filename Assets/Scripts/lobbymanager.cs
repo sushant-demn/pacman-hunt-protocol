@@ -6,12 +6,15 @@ using Photon.Pun.Demo.PunBasics;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 public class lobbymanager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_InputField roomName;
     [SerializeField] private TextMeshProUGUI roomCode;
     [SerializeField] private TMP_InputField playerName;
     [SerializeField] private Button[] characterButtons;
+    [SerializeField] private Button sButton;
+    private GameObject startButton;
     [SerializeField] private TextMeshProUGUI[] characterPlayers;
     public GameObject lobbyCanvas;
     public GameObject roomCanvas;
@@ -22,7 +25,10 @@ public class lobbymanager : MonoBehaviourPunCallbacks
     private PlayerListManager plManager;
     void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         canvasToggle(true, false, false, false, false);
+        startButton = sButton.gameObject;
+        startButton.SetActive(false);
         plManager = GetComponent<PlayerListManager>();
     }
 
@@ -96,6 +102,18 @@ public class lobbymanager : MonoBehaviourPunCallbacks
 
     public void SelectCharacter(int characterIndex)
     {
+        int currentChoice = -1;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CharacterIndex"))
+            currentChoice = (int)PhotonNetwork.LocalPlayer.CustomProperties["CharacterIndex"];
+
+        if (currentChoice == characterIndex)
+        {
+            Debug.Log("Deselecting character...");
+            Hashtable clearProp = new Hashtable();
+            clearProp["CharacterIndex"] = -1;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(clearProp);
+            return;
+        }
         if (!characterButtons[characterIndex].interactable)
         {
             Debug.LogWarning("That character is already taken!");
@@ -117,6 +135,7 @@ public class lobbymanager : MonoBehaviourPunCallbacks
         for (int i = 0; i < 5; i++)
         {
             characterButtons[i].interactable = true;
+            characterButtons[i].GetComponent<Image>().color = Color.white;
             characterPlayers[i].text = "";
 
         }
@@ -128,15 +147,48 @@ public class lobbymanager : MonoBehaviourPunCallbacks
             if (player.CustomProperties.ContainsKey("CharacterIndex"))
             {
                 int takenIndex = (int)player.CustomProperties["CharacterIndex"];
+                if (takenIndex == -1)
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                        startButton.SetActive(false);
+                    continue;
+                }
 
                 // 4. Turn OFF the button for that specific character
                 if (takenIndex >= 0 && takenIndex < characterButtons.Length)
                 {
-                    characterButtons[takenIndex].interactable = false;
-                    characterPlayers[takenIndex].text = player.NickName;
+                    if (player.IsLocal)
+                    {
+                        if (PhotonNetwork.IsMasterClient)
+                            startButton.SetActive(true);
+                        characterButtons[takenIndex].interactable = true;
+                        characterButtons[takenIndex].GetComponent<Image>().color = new Color(0.3f, 0.3f, 0.3f, 1f);
+                        characterPlayers[takenIndex].text = player.NickName;
+                    }
+                    else
+                    {
+                        characterButtons[takenIndex].interactable = false;
+                        characterPlayers[takenIndex].text = player.NickName;
+                    }
                 }
             }
         }
+    }
+
+    public void toggleReady()
+    {
+        bool isCurrentlyReady = false;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("IsReady"))
+            isCurrentlyReady = (bool)PhotonNetwork.LocalPlayer.CustomProperties["IsReady"];
+
+        bool newReadyState = !isCurrentlyReady;
+        Hashtable readyProps = new Hashtable();
+        readyProps["IsReady"] = newReadyState;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(readyProps);
+    }
+    public void toggleStart()
+    {
+        PhotonNetwork.LoadLevel("Pacman");
     }
 
     // This triggers automatically for EVERYONE in the room whenever ANYONE changes a property
