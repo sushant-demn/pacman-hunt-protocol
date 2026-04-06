@@ -5,6 +5,7 @@ using TMPro;
 using Photon.Pun.Demo.PunBasics;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.SceneManagement;
 public class lobbymanager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_InputField roomName;
@@ -23,6 +24,16 @@ public class lobbymanager : MonoBehaviourPunCallbacks
     {
         canvasToggle(true, false, false, false, false);
         plManager = GetComponent<PlayerListManager>();
+    }
+
+    public void GoBackMainMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+
+    public void GoBackLobby()
+    {
+        canvasToggle(true, false, false, false, false);
     }
 
     void canvasToggle(bool lobby, bool room, bool join, bool host, bool characterSelect)
