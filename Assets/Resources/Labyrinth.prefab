@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 2427404714295444151}
   - component: {fileID: 5588987901116973480}
   m_Layer: 0
-  m_Name: Labrynth
+  m_Name: Labyrinth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
