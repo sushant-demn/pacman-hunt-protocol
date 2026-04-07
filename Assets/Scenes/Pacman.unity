@@ -446,50 +446,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &586877219
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 586877221}
-  - component: {fileID: 586877220}
-  m_Layer: 0
-  m_Name: NetworkManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &586877220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 586877219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea1edfd64cf034b4fbc1da485be3965b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NetworkManager
---- !u!4 &586877221
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 586877219}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.05694, y: -4.54188, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &885877572
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,7 +494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1133529213
 RectTransform:
   m_ObjectHideFlags: 0
@@ -922,6 +878,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1186788531441164699, guid: b406a6785a104684eb085f0ece62c927, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383887048904760172, guid: b406a6785a104684eb085f0ece62c927, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1498016246831752003, guid: b406a6785a104684eb085f0ece62c927, type: 3}
       propertyPath: m_Name
       value: Grid
@@ -964,6 +928,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2427404714295444151, guid: b406a6785a104684eb085f0ece62c927, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4658023812154813132, guid: b406a6785a104684eb085f0ece62c927, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5210781959807208878, guid: b406a6785a104684eb085f0ece62c927, type: 3}
@@ -5438,6 +5406,10 @@ PrefabInstance:
       propertyPath: m_Tiles.Array.data[978].second.m_TileSpriteIndex
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5454504260382275429, guid: b406a6785a104684eb085f0ece62c927, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5485,10 +5457,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::levelManager
   playerPrefabs:
   - {fileID: 4936961659495869691, guid: 5184a0995b9c40241828e72452727e0b, type: 3}
-  - {fileID: 2336075042848322182, guid: 9e2d2f5eb9c96444ea852c0e9431f606, type: 3}
-  - {fileID: 2336075042848322182, guid: 9e2d2f5eb9c96444ea852c0e9431f606, type: 3}
-  - {fileID: 2336075042848322182, guid: 9e2d2f5eb9c96444ea852c0e9431f606, type: 3}
-  - {fileID: 2336075042848322182, guid: 9e2d2f5eb9c96444ea852c0e9431f606, type: 3}
+  - {fileID: 1814567404648583842, guid: 8a9bf4407c5a62a419a52f881f488183, type: 3}
+  - {fileID: 2336075042848322182, guid: d4d80f3ce34d8fe40873a6d28c5b7260, type: 3}
+  - {fileID: 5660416300114475820, guid: 8a83b341e0d2fa84cac05a2fb13e1cc3, type: 3}
+  - {fileID: 1884389399565944631, guid: 6c75eda866a03764a8dbd6c7947c2222, type: 3}
   spawnPoints:
   - {fileID: 2141692322}
   - {fileID: 451091215}
@@ -5503,4 +5475,3 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 3138951557648158214}
   - {fileID: 2065495719}
-  - {fileID: 586877221}

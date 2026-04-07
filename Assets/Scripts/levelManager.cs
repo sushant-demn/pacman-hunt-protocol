@@ -19,10 +19,9 @@ public class levelManager : MonoBehaviourPunCallbacks
             characterToSpawn = (int)PhotonNetwork.LocalPlayer.CustomProperties["CharacterIndex"];
         if (characterToSpawn == -1) characterToSpawn = 1; //safety net if anyone doesn't choose anything so they will be ghost
 
-        //figuring out which spawn point to choose ?
-        // ActorNumbers start at 1, so we subtract 1 to get an array index starting at 0.
-        // We use the Modulo operator (%) as a safety net so if there are 5 players and only 4 spawn points, Player 5 loops back to Spawn Point 0.
-        int spawnIndex = (PhotonNetwork.LocalPlayer.ActorNumber - 1) % spawnPoints.Length;
+
+        int spawnIndex = characterToSpawn;
+        Debug.Log("spawning at " + spawnIndex);
         Transform mySpawnPoint = spawnPoints[spawnIndex];
 
         string prefabName = playerPrefabs[characterToSpawn].name;

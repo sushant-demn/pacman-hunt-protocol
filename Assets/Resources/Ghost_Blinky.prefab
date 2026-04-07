@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3752182027700146805
+--- !u!1001 &961422878016402001
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -9,7 +9,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1631421945586648450, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: initialDirection.y
+      propertyPath: initialDirection.x
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3259707676119580880, guid: 2fde9760580df734b965459e729d1aba, type: 3}
@@ -37,12 +37,16 @@ PrefabInstance:
       value: 1.75
       objectReference: {fileID: 0}
     - target: {fileID: 3259707676119580881, guid: 2fde9760580df734b965459e729d1aba, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3259707676119580881, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: m_Color.g
-      value: 0.70980394
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3259707676119580881, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: m_Color.r
-      value: 0.9882353
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3259707676119580881, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: m_WasSpriteAssigned
@@ -57,73 +61,37 @@ PrefabInstance:
       value: 1.75
       objectReference: {fileID: 0}
     - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: 'spritesUp.Array.data[0]'
-      value: 
-      objectReference: {fileID: 21300000, guid: 0d16b1529051f974183eb0aef20c3fef, type: 3}
-    - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: 'spritesUp.Array.data[1]'
-      value: 
-      objectReference: {fileID: 21300000, guid: cad7e35b3d70a81499afbacf7490bef2, type: 3}
-    - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: 'spritesDown.Array.data[0]'
-      value: 
-      objectReference: {fileID: 21300000, guid: a08760c905ba1ab46b718ab54e94fdcc, type: 3}
-    - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: 'spritesDown.Array.data[1]'
-      value: 
-      objectReference: {fileID: 21300000, guid: 508edf19909d1664295a1cc8adf396f6, type: 3}
-    - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: 'spritesLeft.Array.data[0]'
-      value: 
-      objectReference: {fileID: 21300000, guid: 3d61af837289a7d43a1efdb063c7b17f, type: 3}
-    - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: 'spritesLeft.Array.data[1]'
-      value: 
-      objectReference: {fileID: 21300000, guid: ad2c91070caac5f42af69c5373db9b35, type: 3}
-    - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: 'spritesRight.Array.data[0]'
-      value: 
-      objectReference: {fileID: 21300000, guid: f5d5cb4fd17bfd54ba600140ae959812, type: 3}
-    - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: 'spritesRight.Array.data[1]'
-      value: 
-      objectReference: {fileID: 21300000, guid: 7cd2cf6d53534ca4a9b21efe8504c5aa, type: 3}
-    - target: {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: initialBehaviors.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3259707676119580886, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: 'animationSprites.Array.data[0]'
       value: 
-      objectReference: {fileID: 21300000, guid: f5d5cb4fd17bfd54ba600140ae959812, type: 3}
+      objectReference: {fileID: 21300000, guid: f7fccf00d84a07c4b9793861d53ed1ed, type: 3}
     - target: {fileID: 3259707676119580886, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: 'animationSprites.Array.data[1]'
       value: 
-      objectReference: {fileID: 21300000, guid: 7cd2cf6d53534ca4a9b21efe8504c5aa, type: 3}
+      objectReference: {fileID: 21300000, guid: 80eadc1876ef8214194c147c6b151ccd, type: 3}
     - target: {fileID: 3259707676119580887, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: m_Name
-      value: Ghost_Pinky
+      value: Ghost_Blinky
       objectReference: {fileID: 0}
-    - target: {fileID: 3259707676119580887, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+    - target: {fileID: 6337672407132840256, guid: 2fde9760580df734b965459e729d1aba, type: 3}
+      propertyPath: m_Color.b
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6337672407132840256, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: m_Color.g
-      value: 0.70980394
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6337672407132840256, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: m_Color.r
-      value: 0.9882353
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7118088223020557506, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: b97167c35748db84fb4d32f4f242922a, type: 3}
-    - target: {fileID: 8153983311276299916, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-      propertyPath: duration
-      value: 2
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 21300000, guid: d65aa956b7569874fab274083826a77f, type: 3}
     m_RemovedComponents:
     - {fileID: 3259707676119580883, guid: 2fde9760580df734b965459e729d1aba, type: 3}
     - {fileID: 8153983311276299916, guid: 2fde9760580df734b965459e729d1aba, type: 3}
@@ -135,20 +103,65 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3259707676119580887, guid: 2fde9760580df734b965459e729d1aba, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6351389975611951074}
+      addedObject: {fileID: 6938832293220828660}
+    - targetCorrespondingSourceObject: {fileID: 3259707676119580887, guid: 2fde9760580df734b965459e729d1aba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3162146160619133860}
+    - targetCorrespondingSourceObject: {fileID: 3259707676119580887, guid: 2fde9760580df734b965459e729d1aba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3354531085091348585}
   m_SourcePrefab: {fileID: 100100000, guid: 2fde9760580df734b965459e729d1aba, type: 3}
---- !u!1 &1814567404648583842 stripped
+--- !u!1 &2336075042848322182 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3259707676119580887, guid: 2fde9760580df734b965459e729d1aba, type: 3}
-  m_PrefabInstance: {fileID: 3752182027700146805}
+  m_PrefabInstance: {fileID: 961422878016402001}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6351389975611951074
+--- !u!114 &6938832293220828660
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1814567404648583842}
+  m_GameObject: {fileID: 2336075042848322182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonView
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 3162146160619133860}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &3162146160619133860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2336075042848322182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonTransformView
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &3354531085091348585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2336075042848322182}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18a89edb6bc8dab4cb36d0ffc1773ddf, type: 3}
