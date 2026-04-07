@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class PacmanSelector : MonoBehaviour
@@ -10,10 +10,19 @@ public class PacmanSelector : MonoBehaviour
     private bool hasTarget = false;
 
     private Transform currentTarget;
+    private Coroutine clearRoutine;
 
     void Start()
     {
-        gameObject.SetActive(false); // start hidden
+        // ✅ Initialize properly (fixes your first-hover bug)
+        if (defaultButton != null)
+        {
+            MoveTo(defaultButton);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     void Update()
@@ -25,11 +34,21 @@ public class PacmanSelector : MonoBehaviour
             targetPosition,
             moveSpeed * Time.deltaTime
         );
+
+
     }
 
     public void MoveTo(Transform button)
     {
-        // SHOW when hovering
+        if (button == null) return;
+
+        // ✅ Cancel any pending hide (CRITICAL)
+        if (clearRoutine != null)
+        {
+            StopCoroutine(clearRoutine);
+            clearRoutine = null;
+        }
+
         if (!gameObject.activeSelf)
             gameObject.SetActive(true);
 
@@ -45,32 +64,36 @@ public class PacmanSelector : MonoBehaviour
             worldPos.z
         );
 
-        // snap instantly first time (prevents sliding from weird position)
+        // Snap instantly to avoid weird first movement
         transform.position = targetPosition;
     }
 
     public void ClearTarget(Transform button)
     {
-        if (currentTarget == button)
+        if (!gameObject.activeInHierarchy) return;
+        if (currentTarget != button) return;
+
+        // ✅ Prevent multiple coroutines stacking
+        if (clearRoutine != null)
         {
-            StartCoroutine(ClearAfterDelay(button));
+            StopCoroutine(clearRoutine);
         }
+
+        clearRoutine = StartCoroutine(ClearAfterDelay(button));
     }
-
-
 
     IEnumerator ClearAfterDelay(Transform button)
     {
-        yield return null; // wait 1 frame (prevents flicker when switching buttons)
+        yield return null; // wait 1 frame
 
-        if (currentTarget == button)
-        {
-            hasTarget = false;
-            currentTarget = null;
+        // If user hovered another button → cancel hide
+        if (currentTarget != button) yield break;
 
-            // HIDE when no button is active
-            gameObject.SetActive(false);
-        }
+        hasTarget = false;
+        currentTarget = null;
+        clearRoutine = null;
+
+        gameObject.SetActive(false);
     }
 
     float GetOffset(Transform button)
