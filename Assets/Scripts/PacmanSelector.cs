@@ -6,15 +6,21 @@ public class PacmanSelector : MonoBehaviour
     public float moveSpeed = 10f;
     public Transform defaultButton;
 
-    private Vector3 targetPosition;
+    private Vector2 targetPosition;
     private bool hasTarget = false;
 
     private Transform currentTarget;
     private Coroutine clearRoutine;
 
+    private RectTransform rect;
+
+    void Awake()
+    {
+        rect = GetComponent<RectTransform>();
+    }
+
     void Start()
     {
-        // ✅ Initialize properly (fixes your first-hover bug)
         if (defaultButton != null)
         {
             MoveTo(defaultButton);
@@ -29,43 +35,50 @@ public class PacmanSelector : MonoBehaviour
     {
         if (!hasTarget) return;
 
-        transform.position = Vector3.MoveTowards(
-            transform.position,
+        rect.anchoredPosition = Vector2.MoveTowards(
+            rect.anchoredPosition,
             targetPosition,
             moveSpeed * Time.deltaTime
         );
-
-
     }
 
     public void MoveTo(Transform button)
     {
         if (button == null) return;
 
-        // ✅ Cancel any pending hide (CRITICAL)
         if (clearRoutine != null)
         {
             StopCoroutine(clearRoutine);
             clearRoutine = null;
         }
 
-        if (!gameObject.activeSelf)
-            gameObject.SetActive(true);
-
-        currentTarget = button;
-        hasTarget = true;
+        gameObject.SetActive(true);
 
         RectTransform btn = button.GetComponent<RectTransform>();
-        Vector3 worldPos = btn.TransformPoint(btn.rect.center);
+        RectTransform myRect = GetComponent<RectTransform>();
 
-        targetPosition = new Vector3(
-            worldPos.x - GetOffset(button),
-            worldPos.y,
-            worldPos.z
+        // ✅ LEFT EDGE instead of center
+        Vector3 leftEdge = new Vector3(btn.rect.xMin, btn.rect.center.y, 0);
+        Vector3 worldPos = btn.TransformPoint(leftEdge);
+
+        Camera cam = Camera.main;
+
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, worldPos);
+
+        RectTransform canvasRect = myRect.parent as RectTransform;
+
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            screenPoint,
+            cam,
+            out localPoint
         );
 
-        // Snap instantly to avoid weird first movement
-        transform.position = targetPosition;
+        // ✅ smaller offset
+        targetPosition = localPoint + new Vector2(-50f, 0);
+
+        myRect.anchoredPosition = targetPosition;
     }
 
     public void ClearTarget(Transform button)
@@ -73,7 +86,6 @@ public class PacmanSelector : MonoBehaviour
         if (!gameObject.activeInHierarchy) return;
         if (currentTarget != button) return;
 
-        // ✅ Prevent multiple coroutines stacking
         if (clearRoutine != null)
         {
             StopCoroutine(clearRoutine);
@@ -84,9 +96,8 @@ public class PacmanSelector : MonoBehaviour
 
     IEnumerator ClearAfterDelay(Transform button)
     {
-        yield return null; // wait 1 frame
+        yield return null;
 
-        // If user hovered another button → cancel hide
         if (currentTarget != button) yield break;
 
         hasTarget = false;
@@ -96,9 +107,8 @@ public class PacmanSelector : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    float GetOffset(Transform button)
+    float GetOffset(RectTransform button)
     {
-        RectTransform rt = button.GetComponent<RectTransform>();
-        return rt.rect.width * 0.62f;
+        return button.rect.width * 0.6f;
     }
 }
