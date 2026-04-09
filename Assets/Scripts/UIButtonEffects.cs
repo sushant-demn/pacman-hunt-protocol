@@ -1,47 +1,54 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UIButtonEffects : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class UIButtonEffects : MonoBehaviour,
+    IPointerEnterHandler,
+    IPointerExitHandler,
+    IPointerDownHandler,
+    IPointerUpHandler
 {
     private Vector3 originalScale;
 
     public float hoverScale = 1.1f;
     public float clickScale = 0.95f;
+
     private PacmanSelector selector;
+
 
     void Awake()
     {
         selector = FindObjectOfType<PacmanSelector>();
+        originalScale = transform.localScale;
     }
 
-    void Start()
+    void OnEnable()
     {
-        originalScale = transform.localScale;
+        transform.localScale = originalScale;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         transform.localScale = originalScale * hoverScale;
 
-        selector.MoveTo(transform);
+        if (selector != null)
+            selector.MoveTo(transform);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         transform.localScale = originalScale;
 
-        selector.ClearTarget(transform);
+        if (selector != null)
+            selector.ClearTarget(transform);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         transform.localScale = originalScale * clickScale;
-        //selector.ClearTarget(transform);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         transform.localScale = originalScale * hoverScale;
     }
-
 }

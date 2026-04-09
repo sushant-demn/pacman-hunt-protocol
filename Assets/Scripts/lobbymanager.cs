@@ -55,7 +55,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         panelToShow.SetActive(true);
 
         if (pacman != null)
+        {
             pacman.gameObject.SetActive(false);
+        }
     }
 
     // =========================
