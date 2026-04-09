@@ -2,58 +2,116 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-using Photon.Pun.Demo.PunBasics;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using UnityEngine.SceneManagement;
-public class lobbymanager : MonoBehaviourPunCallbacks
+
+public class LobbyManager : MonoBehaviourPunCallbacks
 {
+    [Header("Input Fields")]
     [SerializeField] private TMP_InputField roomName;
-    [SerializeField] private TextMeshProUGUI roomCode;
     [SerializeField] private TMP_InputField playerName;
+
+    [Header("Room UI")]
+    [SerializeField] private TextMeshProUGUI roomCode;
+
+    [Header("Character Selection")]
     [SerializeField] private Button[] characterButtons;
     [SerializeField] private TextMeshProUGUI[] characterPlayers;
-    public GameObject lobbyCanvas;
-    public GameObject roomCanvas;
-    public GameObject joinCanvas;
-    public GameObject hostCanvas;
-    public GameObject characterSelectCanvas;
+
+    [Header("Panels")]
+    [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private GameObject lobbyPanel;
+    [SerializeField] private GameObject hostPanel;
+    [SerializeField] private GameObject joinPanel;
+    [SerializeField] private GameObject roomPanel;
+
+    [SerializeField] private PacmanSelector pacman;
 
     private PlayerListManager plManager;
+
     void Start()
     {
-        canvasToggle(true, false, false, false, false);
+        ShowPanel(mainMenuPanel);
+
         plManager = GetComponent<PlayerListManager>();
+
+        if (plManager == null)
+        {
+            Debug.LogError("PlayerListManager is missing on this GameObject!");
+        }
     }
 
+    // =========================
+    // PANEL CONTROL (STATE SYSTEM)
+    // =========================
+    void ShowPanel(GameObject panelToShow)
+    {
+        mainMenuPanel.SetActive(false);
+        lobbyPanel.SetActive(false);
+        hostPanel.SetActive(false);
+        joinPanel.SetActive(false);
+        roomPanel.SetActive(false);
+
+        panelToShow.SetActive(true);
+
+        if (pacman != null)
+            pacman.gameObject.SetActive(false);
+    }
+
+    // =========================
+    // MAIN MENU
+    // =========================
+    public void PlayGame()
+    {
+        ShowPanel(lobbyPanel);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    // =========================
+    // NAVIGATION
+    // =========================
     public void GoBackMainMenu()
     {
-        SceneManager.LoadSceneAsync(0);
+        ShowPanel(mainMenuPanel);
     }
 
     public void GoBackLobby()
     {
-        canvasToggle(true, false, false, false, false);
+        ShowPanel(lobbyPanel);
     }
 
-    void canvasToggle(bool lobby, bool room, bool join, bool host, bool characterSelect)
+    public void GoToHost()
     {
-        lobbyCanvas.SetActive(lobby);
-        roomCanvas.SetActive(room);
-        joinCanvas.SetActive(join);
-        hostCanvas.SetActive(host);
-        characterSelectCanvas.SetActive(characterSelect);
+        ShowPanel(hostPanel);
     }
 
+    public void GoToJoin()
+    {
+        ShowPanel(joinPanel);
+    }
+
+    // =========================
+    // NETWORKING
+    // =========================
     public void HostGame()
     {
         if (string.IsNullOrEmpty(roomName.text) || string.IsNullOrEmpty(playerName.text))
         {
-            Debug.LogWarning("Room name is empty");
+            Debug.LogWarning("HostGame failed: Missing input");
             return;
         }
-        RoomOptions options = new RoomOptions { MaxPlayers = 5 };
+
         PhotonNetwork.NickName = playerName.text;
+
+        RoomOptions options = new RoomOptions
+        {
+            MaxPlayers = 5
+        };
+
         PhotonNetwork.CreateRoom(roomName.text, options);
     }
 
@@ -61,101 +119,97 @@ public class lobbymanager : MonoBehaviourPunCallbacks
     {
         if (string.IsNullOrEmpty(roomName.text) || string.IsNullOrEmpty(playerName.text))
         {
-            Debug.LogWarning("Room name is empty");
+            Debug.LogWarning("JoinGame failed: Missing input");
             return;
         }
-        PhotonNetwork.NickName = playerName.text;
-        PhotonNetwork.JoinRoom(roomName.text);
 
+        PhotonNetwork.NickName = playerName.text;
+
+        PhotonNetwork.JoinRoom(roomName.text);
     }
 
+    // =========================
+    // PHOTON CALLBACKS
+    // =========================
     public override void OnJoinedRoom()
     {
-        base.OnJoinedRoom();
-        Debug.Log("joined room" + PhotonNetwork.CurrentRoom.Name);
-        DisplayCharacterSelectCanvas();
-        plManager.UpdatePlayerListUI();
-        RefreshCharacterButtons();
+        Debug.Log("Joined Room: " + PhotonNetwork.CurrentRoom.Name);
+
+        ShowPanel(roomPanel);
+
         roomCode.text = PhotonNetwork.CurrentRoom.Name;
+
+        if (plManager != null)
+            plManager.UpdatePlayerListUI();
+
+        RefreshCharacterButtons();
     }
 
-    public void DisplayJoinCanvas()
+    public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        canvasToggle(false, true, true, false, false);
+        Debug.LogError("Join Room Failed: " + message);
     }
 
-    public void DisplayHostCanvas()
+    public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        canvasToggle(false, true, false, true, false);
-    }
-
-    public void DisplayCharacterSelectCanvas()
-    {
-        canvasToggle(false, false, false, false, true);
-    }
-
-    public void SelectCharacter(int characterIndex)
-    {
-        if (!characterButtons[characterIndex].interactable)
-        {
-            Debug.LogWarning("That character is already taken!");
-            return;
-        }
-        Debug.Log("Selected Character Index: " + characterIndex);
-        Hashtable playerCustomProps = new Hashtable();
-
-        // 2. Add our chosen character index to the table under a key named "CharacterIndex"
-        playerCustomProps["CharacterIndex"] = characterIndex;
-
-        // 3. Push this data to the Photon network so everyone knows what we picked
-        PhotonNetwork.LocalPlayer.SetCustomProperties(playerCustomProps);
-    }
-
-    private void RefreshCharacterButtons()
-    {
-        // 1. Reset: Turn ALL buttons ON first
-        for (int i = 0; i < 5; i++)
-        {
-            characterButtons[i].interactable = true;
-            characterPlayers[i].text = "";
-
-        }
-
-        // 2. Loop through every player currently in the room
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            // 3. Check if this player has picked a character yet
-            if (player.CustomProperties.ContainsKey("CharacterIndex"))
-            {
-                int takenIndex = (int)player.CustomProperties["CharacterIndex"];
-
-                // 4. Turn OFF the button for that specific character
-                if (takenIndex >= 0 && takenIndex < characterButtons.Length)
-                {
-                    characterButtons[takenIndex].interactable = false;
-                    characterPlayers[takenIndex].text = player.NickName;
-                }
-            }
-        }
-    }
-
-    // This triggers automatically for EVERYONE in the room whenever ANYONE changes a property
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
-    {
-        // Example: Check if the property that changed was the CharacterIndex
-        if (changedProps.ContainsKey("CharacterIndex"))
-        {
-            Debug.Log(targetPlayer.NickName + " changed their character to index " + changedProps["CharacterIndex"]);
-            RefreshCharacterButtons();
-
-            // Here you could update a UI image next to their name in the lobby to show their new choice!
-        }
+        Debug.LogError("Create Room Failed: " + message);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        base.OnPlayerLeftRoom(otherPlayer);
         RefreshCharacterButtons();
     }
 
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (changedProps.ContainsKey("CharacterIndex"))
+        {
+            Debug.Log(targetPlayer.NickName + " selected character " + changedProps["CharacterIndex"]);
+            RefreshCharacterButtons();
+        }
+    }
+
+    // =========================
+    // CHARACTER SELECTION
+    // =========================
+    public void SelectCharacter(int characterIndex)
+    {
+        if (!characterButtons[characterIndex].interactable)
+        {
+            Debug.LogWarning("Character already taken!");
+            return;
+        }
+
+        Hashtable props = new Hashtable
+        {
+            { "CharacterIndex", characterIndex }
+        };
+
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+    }
+
+    private void RefreshCharacterButtons()
+    {
+        // Reset all buttons
+        for (int i = 0; i < characterButtons.Length; i++)
+        {
+            characterButtons[i].interactable = true;
+            characterPlayers[i].text = "";
+        }
+
+        // Disable taken characters
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.CustomProperties.ContainsKey("CharacterIndex"))
+            {
+                int index = (int)player.CustomProperties["CharacterIndex"];
+
+                if (index >= 0 && index < characterButtons.Length)
+                {
+                    characterButtons[index].interactable = false;
+                    characterPlayers[index].text = player.NickName;
+                }
+            }
+        }
+    }
 }
