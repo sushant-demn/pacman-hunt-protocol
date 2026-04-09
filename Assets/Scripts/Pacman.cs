@@ -21,14 +21,22 @@ public class Pacman : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
         // Set the new direction based on the current input
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
             movement.SetDirection(Vector2.up);
-        else if (Input.GetKey(KeyCode.S))
+        }
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
             movement.SetDirection(Vector2.down);
-        else if (Input.GetKey(KeyCode.A))
+        }
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
             movement.SetDirection(Vector2.left);
-        else if (Input.GetKey(KeyCode.D))
+        }
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
             movement.SetDirection(Vector2.right);
+        }
 
         // Rotate pacman to face the movement direction
         float angle = Mathf.Atan2(movement.direction.y, movement.direction.x);
@@ -53,6 +61,18 @@ public class Pacman : MonoBehaviourPun
         movement.enabled = false;
         deathSequence.enabled = true;
         deathSequence.Restart();
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+        if (collision.gameObject.CompareTag("ghost"))
+        {
+            DeathSequence();
+            PhotonNetwork.Destroy(gameObject);
+        }
     }
 
 }

@@ -16,6 +16,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     [Header("Character Selection")]
     [SerializeField] private Button[] characterButtons;
+    [SerializeField] private Button sButton;
+    private GameObject startButton;
     [SerializeField] private TextMeshProUGUI[] characterPlayers;
 
     [Header("Panels")]
@@ -174,6 +176,18 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     // =========================
     public void SelectCharacter(int characterIndex)
     {
+        int currentChoice = -1;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("CharacterIndex"))
+            currentChoice = (int)PhotonNetwork.LocalPlayer.CustomProperties["CharacterIndex"];
+
+        if (currentChoice == characterIndex)
+        {
+            Debug.Log("Deselecting character...");
+            Hashtable clearProp = new Hashtable();
+            clearProp["CharacterIndex"] = -1;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(clearProp);
+            return;
+        }
         if (!characterButtons[characterIndex].interactable)
         {
             Debug.LogWarning("Character already taken!");
@@ -194,6 +208,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < characterButtons.Length; i++)
         {
             characterButtons[i].interactable = true;
+            characterButtons[i].GetComponent<Image>().color = Color.white;
             characterPlayers[i].text = "";
         }
 
