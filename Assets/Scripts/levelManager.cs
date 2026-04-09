@@ -26,6 +26,13 @@ public class levelManager : MonoBehaviourPunCallbacks
 
         string prefabName = playerPrefabs[characterToSpawn].name;
         Debug.Log($"Spawning as {prefabName} at {mySpawnPoint.name}");
-        PhotonNetwork.Instantiate(prefabName, mySpawnPoint.position, mySpawnPoint.rotation);
+        GameObject myPlayer = PhotonNetwork.Instantiate(prefabName, mySpawnPoint.position, mySpawnPoint.rotation);
+        //Camera Targetting Local Player
+        Camera.main.GetComponent<CameraFollow>().target = myPlayer.transform;
+        GameObject minimapCam = GameObject.Find("minimapCamera");
+        if (characterToSpawn == 0)
+            Camera.main.GetComponent<CameraFollow>().setCameraFullSize();
+        if (minimapCam != null)
+            minimapCam.GetComponent<CameraFollow>().target = myPlayer.transform;
     }
 }

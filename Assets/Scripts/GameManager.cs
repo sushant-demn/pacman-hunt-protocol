@@ -1,3 +1,4 @@
+using UnityEditor.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
         // Always keep reference updated
         if (pacman == null)
         {
-                pacman = FindAnyObjectByType<Pacman>();
+            pacman = FindAnyObjectByType<Pacman>();
         }
 
         if (lives <= 0 && Input.anyKeyDown)
@@ -110,7 +111,7 @@ public class GameManager : MonoBehaviour
         livesText.text = "x" + lives;
     }
 
-    
+
 
     public void PowerPelletEaten(PowerPellet pellet)
     {

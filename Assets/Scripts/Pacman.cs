@@ -62,5 +62,17 @@ public class Pacman : MonoBehaviourPun
         deathSequence.enabled = true;
         deathSequence.Restart();
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+        if (collision.gameObject.CompareTag("ghost"))
+        {
+            DeathSequence();
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
 
 }
