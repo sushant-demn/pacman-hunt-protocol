@@ -33,8 +33,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         ShowPanel(mainMenuPanel);
-
+        startButton = sButton.gameObject;
+        startButton.SetActive(false);
         plManager = GetComponent<PlayerListManager>();
 
         if (plManager == null)
@@ -129,6 +131,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.JoinRoom(roomName.text);
     }
+    //to load a level
+    public void toggleStart()
+    {
+        PhotonNetwork.LoadLevel("Pacman");
+    }
 
     // =========================
     // PHOTON CALLBACKS
@@ -194,6 +201,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             return;
         }
 
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            startButton.SetActive(true);
         Hashtable props = new Hashtable
         {
             { "CharacterIndex", characterIndex }
@@ -217,6 +226,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             if (player.CustomProperties.ContainsKey("CharacterIndex"))
             {
+                Debug.Log("character selected by" + player.NickName + " is " + player.CustomProperties["CharacterIndex"]);
                 int index = (int)player.CustomProperties["CharacterIndex"];
 
                 if (index >= 0 && index < characterButtons.Length)

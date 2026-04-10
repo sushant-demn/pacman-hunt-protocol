@@ -7,7 +7,12 @@ public class UIButtonEffects : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public float hoverScale = 1.1f;
     public float clickScale = 0.95f;
-    public PacmanSelector selector;
+    private PacmanSelector selector;
+
+    void Awake()
+    {
+        selector = FindObjectOfType<PacmanSelector>();
+    }
 
     void Start()
     {
