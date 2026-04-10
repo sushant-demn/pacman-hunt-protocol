@@ -33,6 +33,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         ShowPanel(mainMenuPanel);
         startButton = sButton.gameObject;
         startButton.SetActive(false);
