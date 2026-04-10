@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PacmanSelector : MonoBehaviour
@@ -6,37 +6,22 @@ public class PacmanSelector : MonoBehaviour
     public float moveSpeed = 10f;
     public Transform defaultButton;
 
-    private Vector2 targetPosition;
+    private Vector3 targetPosition;
     private bool hasTarget = false;
 
     private Transform currentTarget;
-    private Coroutine clearRoutine;
-
-    private RectTransform rect;
-
-    void Awake()
-    {
-        rect = GetComponent<RectTransform>();
-    }
 
     void Start()
     {
-        if (defaultButton != null)
-        {
-            MoveTo(defaultButton);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(false); // start hidden
     }
 
     void Update()
     {
         if (!hasTarget) return;
 
-        rect.anchoredPosition = Vector2.MoveTowards(
-            rect.anchoredPosition,
+        transform.position = Vector3.MoveTowards(
+            transform.position,
             targetPosition,
             moveSpeed * Time.deltaTime
         );
@@ -44,71 +29,53 @@ public class PacmanSelector : MonoBehaviour
 
     public void MoveTo(Transform button)
     {
-        if (button == null) return;
+        // SHOW when hovering
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
 
-        if (clearRoutine != null)
-        {
-            StopCoroutine(clearRoutine);
-            clearRoutine = null;
-        }
-
-        gameObject.SetActive(true);
+        currentTarget = button;
+        hasTarget = true;
 
         RectTransform btn = button.GetComponent<RectTransform>();
-        RectTransform myRect = GetComponent<RectTransform>();
+        Vector3 worldPos = btn.TransformPoint(btn.rect.center);
 
-        // ✅ LEFT EDGE instead of center
-        Vector3 leftEdge = new Vector3(btn.rect.xMin, btn.rect.center.y, 0);
-        Vector3 worldPos = btn.TransformPoint(leftEdge);
-
-        Camera cam = Camera.main;
-
-        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, worldPos);
-
-        RectTransform canvasRect = myRect.parent as RectTransform;
-
-        Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRect,
-            screenPoint,
-            cam,
-            out localPoint
+        targetPosition = new Vector3(
+            worldPos.x - GetOffset(button),
+            worldPos.y,
+            worldPos.z
         );
 
-        // ✅ smaller offset
-        targetPosition = localPoint + new Vector2(-50f, 0);
-
-        myRect.anchoredPosition = targetPosition;
+        // snap instantly first time (prevents sliding from weird position)
+        transform.position = targetPosition;
     }
 
     public void ClearTarget(Transform button)
     {
-        if (!gameObject.activeInHierarchy) return;
-        if (currentTarget != button) return;
-
-        if (clearRoutine != null)
+        if (currentTarget == button)
         {
-            StopCoroutine(clearRoutine);
+            StartCoroutine(ClearAfterDelay(button));
         }
-
-        clearRoutine = StartCoroutine(ClearAfterDelay(button));
     }
+
+
 
     IEnumerator ClearAfterDelay(Transform button)
     {
-        yield return null;
+        yield return null; // wait 1 frame (prevents flicker when switching buttons)
 
-        if (currentTarget != button) yield break;
+        if (currentTarget == button)
+        {
+            hasTarget = false;
+            currentTarget = null;
 
-        hasTarget = false;
-        currentTarget = null;
-        clearRoutine = null;
-
-        gameObject.SetActive(false);
+            // HIDE when no button is active
+            gameObject.SetActive(false);
+        }
     }
 
-    float GetOffset(RectTransform button)
+    float GetOffset(Transform button)
     {
-        return button.rect.width * 0.6f;
+        RectTransform rt = button.GetComponent<RectTransform>();
+        return rt.rect.width * 0.62f;
     }
 }
