@@ -192,8 +192,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             Debug.Log("Deselecting character...");
             Hashtable clearProp = new Hashtable();
             clearProp["CharacterIndex"] = -1;
-            if (PhotonNetwork.LocalPlayer.IsMasterClient)
-                startButton.SetActive(false);
             PhotonNetwork.LocalPlayer.SetCustomProperties(clearProp);
             return;
         }
